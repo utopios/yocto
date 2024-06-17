@@ -1,0 +1,29 @@
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    gawk wget git-core diffstat unzip texinfo gcc-multilib build-essential \
+    chrpath socat cpio python3 python3-pip python3-pexpect xz-utils \
+    debianutils iputils-ping python3-git python3-jinja2 libegl1-mesa \
+    libsdl1.2-dev pylint xterm locales lz4 sudo zstd curl
+
+
+RUN locale-gen en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
+
+RUN ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
+    echo "Etc/UTC" > /etc/timezone && \
+    dpkg-reconfigure --frontend noninteractive tzdata
+
+RUN groupadd -g 1000 yocto && \
+useradd -ms /bin/bash -u 1000 -g 1000 yocto && \
+echo "yocto:yocto" | chpasswd && \
+adduser yocto sudo
+
+USER yocto
+WORKDIR /home/yocto
+
+CMD [ "bash" ]
