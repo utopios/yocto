@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+    environment {
+        YOCTO_DIR = '/path/yocto'
+        BUILD_DIR = "${YOCTO_DIR}/build"
+        MACHINE = 'quemx86'
+        IMAGE = 'core-image-minimal'
+    }
+
+    stages {
+        stage('Setup yocto Environement') {
+            steps {
+                sh '''
+                    source ${YOCTO_DIR}/poky/oe-init-build-env ${BUILD_DIR}
+                '''
+            }
+        }
+    }
+}
