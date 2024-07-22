@@ -26,10 +26,15 @@ bitbake core-image-minimal -c populate_sdk
 - Avant on peut créer une clé usb pour partager les données entre notre qemu et le host
 - Si qemu-img est non disponible, on peut l'installer par exemple sur ubuntu avec la commande `apt install qemu-utils -y`
 ```
-qemu-img create -f usb.img 1G
+qemu-img create -f raw usb.img 1G
+mkfs.ext4 usb.img
 ```
 
 - Commande pour démarrer un qemux86-64
 ```
 runqemu qemux86-64 nographic slirp qemuparams="-netdev user,id=usernet,hostfwd=tcp::224-:22 -device e1000,netdev=usernet -drive file=usb.img,format=raw,if=none,id=usbdisk -device usb-storage,drive=usbdisk"
 ```
+
+7. # Arreter les machines
+shutdown now
+poweroff
